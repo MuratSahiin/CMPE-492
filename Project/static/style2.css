@@ -1,0 +1,305 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #f04e23;
+    padding: 20px 0;
+    color: white;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.logo h1 {
+    margin: 0;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.search-bar input {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.search-bar button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.user-actions button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #333;
+    color: white;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+main {
+    margin: 20px 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+aside {
+    width: 25%;
+    padding-right: 20px;
+}
+
+aside h2 {
+    background-color: #f04e23;
+    color: white;
+    padding: 10px;
+    margin: 0 0 10px 0;
+}
+
+.filter {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.filter button, .filter select {
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.categories {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.categories li {
+    margin: 5px 0;
+}
+
+.categories a {
+    text-decoration: none;
+    color: #333;
+}
+
+.categories a:hover {
+    text-decoration: underline;
+}
+
+.ads {
+    width: 75%;
+}
+
+.ads h2 {
+    background-color: #f04e23;
+    color: white;
+    padding: 10px;
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+.ad-list {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    background-color: #f04e23;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+tbody td {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+
+.ad-item {
+    display: flex;
+    align-items: center;
+}
+
+.ad-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.ad-details {
+    flex: 1;
+}
+
+.ad-details h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #f04e23;
+}
+
+.ad-details p {
+    margin: 5px 0;
+    color: #666;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #f5f5f5;
+    padding: 20px 0;
+    border-top: 1px solid #ddd;
+    width: 100%;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    width: 90%;
+    margin: auto;
+    max-width: 1200px;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    width: 20%;
+    min-width: 150px;
+    padding: 10px;
+}
+
+.footer-section img {
+    max-width: 100%;
+}
+
+.footer-section h4 {
+    color: #f04e23;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.footer-contact {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.footer-contact h4 {
+    color: #f04e23;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer-contact p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.footer-apps {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.footer-apps a {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.footer-apps img {
+    width: 150px;
+}
+.ad-item img {
+    width: 100px;
+    height: auto;
+}
+
+footer {
+    background-color: #f04e23;
+    color: white;
+    padding: 20px 0;
+    font-size: 14px;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.footer-section {
+    width: 25%;
+    padding: 10px;
+    min-width: 150px;
+}
+
+.footer-section h4 {
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-section ul li a {
+    color: white;
+    text-decoration: none;
+    opacity: 0.9;
+}
+
+.footer-section ul li a:hover {
+    opacity: 1;
+}
+
+.footer-contact p, .footer-apps img {
+    margin: 5px 0;
+}
+
+.footer-apps img {
+    width: 120px;
+}

@@ -1,0 +1,53 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+header {
+    background-color: #f04e23;
+    padding: 20px 0;
+    color: white;
+    margin: 0;
+    width: 100%;
+}
+
+.container {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    margin: 0;
+}
+
+/* Hide search bar and user actions */
+.search-bar, .user-actions {
+    display: none;
+}
+
+div {
+    padding: 20px;
+    margin: 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label, form input, form button {
+    margin-top: 5px;
+    padding: 10px;
+}
+
+/* Ensuring that the header spans the entire width of the page without any white space */
+html, body {
+    height: 100%;
+    overflow-x: hidden; /* Prevents horizontal scroll */
+}

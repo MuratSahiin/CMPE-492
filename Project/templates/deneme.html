@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawRescueHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>PawRescueHub</h1>
+            </div>
+  <div class="search-bar">
+    <!-- Form updated to send GET request to the search endpoint -->
+    <form method="get" action="/search">
+        <input type="text" name="search_term" placeholder="Enter dog breed">
+        <button type="submit">Search</button>
+    </form>
+</div>
+            <div class="user-actions">
+                <button type="button" onclick="window.location.href='/photo-upload'">Hemen İlan Ver</button>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <aside>
+                <h2>Kayıp Hayvan İlanları</h2>
+                <div class="filter">
+                    <button type="button">Filtrele</button>
+                    <select>
+                        <option value="">İl Seçiniz</option>
+                        <!-- Diğer seçenekleri buraya ekleyin -->
+                    </select>
+                </div>
+            </aside>
+            <section class="ads">
+                <h2>Kayıp Hayvan İlanları</h2>
+                <div class="ad-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fotoğraf</th>
+                                <th>Tür</th>
+                                <th>Adres</th>
+                                <th>Telefon</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dog in dogs %}
+                            <tr>
+                                <td class="ad-item">
+                                    <img src="data:image/jpeg;base64,{{ dog[4] }}" alt="Lost Pet" style="width: 100px; height: 100px;">
+                                    <div class="ad-details">
+                                        <h3>{{ dog[0] }}</h3>
+                                    </div>
+                                </td>
+                                <td><img src="data:image/jpeg;base64,{{ dog[4] }}"style="width: 100px; height: 100px;"></td>
+                                <td>{{ dog[0] }}</td>
+                                <td>{{ dog[2] }}</td>
+                                <td>{{ dog[3] }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5">Kayıp hayvan ilanı bulunamadı.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Hızlı Bağlantılar</h4>
+                <ul>
+                    <li><a href="/about">Hakkımızda</a></li>
+                    <li><a href="/contact">İletişim</a></li>
+                    <li><a href="/privacy">Gizlilik Politikası</a></li>
+                    <li><a href="/terms">Kullanım Koşulları</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Sosyal Medya</h4>
+                <ul>
+                    <li><a href="https://facebook.com">Facebook</a></li>
+                    <li><a href="https://twitter.com">Twitter</a></li>
+                    <li><a href="https://instagram.com">Instagram</a></li>
+                </ul>
+            </div>
+            <div class="footer-section footer-contact">
+                <h4>İletişim</h4>
+                <p>Email: info@pawrescuehub.com</p>
+                <p>Telefon: +90 123 456 78 90</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+
+
+
+
+
+
+from flask import Flask, request, redirect, url_for, render_template, send_from_directory
+from werkzeug.utils import secure_filename
+import os
+from MySqlConnection import get_db_connection, query_dogs_by_breed
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/photo-upload', methods=['GET', 'POST'])
+def upload_photo():
+    if request.method == 'POST':
+        # Check if the post request has the file part
+        if 'photo' not in request.files:
+            return redirect(request.url)
+        file = request.files['photo']
+        # If user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            # Save file info and other form data to the database
+            type = request.form['type']
+            color = request.form['color']
+            address = request.form['address']
+            phone = request.form['phone']
+            save_to_db(type, color, address, phone, filename)
+
+            return redirect(url_for('index'))
+    return render_template('photo_upload.html')
+
+def save_to_db(type, color, address, phone, filename):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    query = "INSERT INTO dog (breed, color, address, phone_number, photo) VALUES (%s, %s, %s, %s, %s)"
+    cursor.execute(query, (type, color, address, phone, filename))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+@app.route('/')
+def index():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT breed, color, address, phone_number, photo FROM dog")
+    dogs = cursor.fetchall()
+    dogs = [(dog[0], dog[1], dog[2], dog[3], convert_blob_to_base64(dog[4])) for dog in dogs]
+    cursor.close()
+    conn.close()
+    return render_template('index2.html', dogs=dogs)
+
+
+
+@app.route('/static/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+@app.route('/search')
+def search():
+    search_term = request.args.get('search_term')
+    dogs = query_dogs_by_breed(search_term)
+    return render_template('index2.html', dogs=dogs)
+
+
+import base64
+
+def convert_blob_to_base64(blob_data):
+    base64_data = base64.b64encode(blob_data).decode('utf-8')
+    return f"data:image/jpeg;base64,{base64_data}"
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+
+
+    import mysql.connector
+
+def get_db_connection():
+    connection = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='',
+        database='dog_records'
+    )
+    return connection
+
+def get_dog_records():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute("SELECT id, breed, color, photo, address, phone_number FROM dog")
+        records = cursor.fetchall()
+        return records
+    except mysql.connector.Error as err:
+        print(f"Hata oluştu: {err}")
+        return []
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+
+def query_dogs_by_breed(search_term):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        query = "SELECT * FROM dog WHERE breed LIKE %s"
+        cursor.execute(query, ('%' + search_term + '%',))
+        result = cursor.fetchall()
+        return result
+    except mysql.connector.Error as err:
+        print(f"Hata oluştu: {err}")
+        return []
+    finally:
+        if conn.is_connected():
+            cursor.close()
+            conn.close()

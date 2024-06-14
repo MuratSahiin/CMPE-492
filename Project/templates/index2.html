@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawRescueHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>PawRescueHub</h1>
+            </div>
+            <div class="search-bar">
+    <form method="get" action="/search">
+        <input type="text" name="search_term" placeholder="Enter dog breed">
+        <button type="submit">Search</button>
+    </form>
+</div>
+            <div class="user-actions">
+                <button type="button" onclick="window.location.href='/photo-upload'">Hemen İlan Ver</button>
+
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            {% if pred_2 %}
+            <aside >
+                <h2>Kayıp Hayvan İlanları</h2>
+                <div class="filter">
+                    <h3> ilk 3 tahmin sonucu</h3>
+                    <ol>
+                        <li style="font-weight: bolder;">{{ search_term }}</li>
+                        <li>{{ pred_1 }}</li>
+                        <li>{{ pred_2 }}</li>
+                    </ol>
+                </div>
+            </aside>
+            {% endif %}
+            <section class="ads">
+                <h2>Kayıp Hayvan İlanları</h2>
+                <div class="ad-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fotoğraf</th>
+                                <th>Tür</th>
+                                <th>Adres</th>
+                                <th>Telefon</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dog in dogs %}
+                            <tr>
+                                <td><img src="data:image/jpeg;base64,{{ dog["photo"] }}"style="width: 100px; height: 100px;"></td>
+                                <td>{{ dog["breed"] }}</td>
+                                <td>{{ dog["address"] }}</td>
+                                <td>{{ dog["phone_number"] }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5">Kayıp hayvan ilanı bulunamadı.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h4>Hızlı Bağlantılar</h4>
+            <ul>
+                <li><a href="/about">Hakkımızda</a></li>
+                <li><a href="/contact">İletişim</a></li>
+                <li><a href="/privacy">Gizlilik Politikası</a></li>
+                <li><a href="/terms">Kullanım Koşulları</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Sosyal Medya</h4>
+            <ul>
+                <li><a href="https://facebook.com">Facebook</a></li>
+                <li><a href="https://twitter.com">Twitter</a></li>
+                <li><a href="https://instagram.com">Instagram</a></li>
+            </ul>
+        </div>
+        <div class="footer-section footer-contact">
+            <h4>İletişim</h4>
+            <p>Email: info@pawrescuehub.com</p>
+            <p>Telefon: +90 123 456 78 90</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
+
+
+
+
+
